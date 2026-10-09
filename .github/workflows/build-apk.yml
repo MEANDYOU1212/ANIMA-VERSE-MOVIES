@@ -32,9 +32,20 @@ jobs:
           npm init -y
           npm install @capacitor/core @capacitor/cli @capacitor/android
           
-          npx cap init "My HTML App" "com.example.htmlapp" --web-dir "www"
+          npx cap init "ANIMA VERSE MOVIES" "com.animaverse.movies" --web-dir "www"
           npx cap add android
           npx cap sync
+
+          # Fix Kotlin Duplicate Classes Conflict
+          echo "
+          configurations.all {
+              resolutionStrategy {
+                  force 'org.jetbrains.kotlin:kotlin-stdlib:1.8.22'
+                  force 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22'
+                  force 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22'
+              }
+          }
+          " >> android/app/build.gradle
 
       - name: Build Debug APK
         run: |
@@ -46,4 +57,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-debug-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          path: android/app/build/outputs/apk/debug/*.apk
